@@ -2,7 +2,6 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const cors = require("cors");
-const path = require("path");
 const connectDB = require("./config/db");
 
 // Load env vars
@@ -16,26 +15,15 @@ const app = express();
 // Middleware to parse JSON bodies
 app.use(express.json());
 
-// Enable CORS
+// Enable CORS for all routes
 app.use(cors());
 
-// Define API Routes
+// API Routes
 app.use("/api/auth", require("./routes/auth"));
 app.use("/api/posts", require("./routes/posts"));
 
-// Serve static assets in production
-if (process.env.NODE_ENV === 'production') {
-  // Set static folder
-  app.use(express.static(path.join(__dirname, '../client/build')));
-
-  // Handle React routing, return all requests to React app
-  app.get('*', (req, res) => {
-    res.sendFile(path.resolve(__dirname, '../client', 'build', 'index.html'));
-  });
-} else {
-  // Basic Route for development
-  app.get("/", (req, res) => res.send("API is running..."));
-}
+// Basic route to check if API is running
+app.get("/", (req, res) => res.send("API is running..."));
 
 const PORT = process.env.PORT || 5000;
 
