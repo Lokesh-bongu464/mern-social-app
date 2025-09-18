@@ -1,8 +1,14 @@
 import axios from 'axios';
 
-// Create an instance of axios
+// The base URL will be determined by the environment
+// In production, it will use the URL we set in our deployment platform's environment variables
+// In development, it will use the proxy in package.json
+const baseURL = process.env.NODE_ENV === 'production'
+  ? process.env.REACT_APP_API_URL
+  : '/api';
+
 const api = axios.create({
-  baseURL: '/api', // The proxy will handle redirecting this to http://localhost:5000/api
+  baseURL: baseURL,
   headers: {
     'Content-Type': 'application/json',
   },
